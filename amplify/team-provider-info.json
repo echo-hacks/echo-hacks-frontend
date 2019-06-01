@@ -1,0 +1,14 @@
+{
+    "env": {
+        "awscloudformation": {
+            "AuthRoleName": "echo-hacks-frontend-env-20190601232909-authRole",
+            "UnauthRoleArn": "arn:aws:iam::314323371770:role/echo-hacks-frontend-env-20190601232909-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::314323371770:role/echo-hacks-frontend-env-20190601232909-authRole",
+            "Region": "ap-northeast-2",
+            "DeploymentBucketName": "echo-hacks-frontend-env-20190601232909-deployment",
+            "UnauthRoleName": "echo-hacks-frontend-env-20190601232909-unauthRole",
+            "StackName": "echo-hacks-frontend-env-20190601232909",
+            "StackId": "arn:aws:cloudformation:ap-northeast-2:314323371770:stack/echo-hacks-frontend-env-20190601232909/9f26f330-8479-11e9-887a-0613112902e0"
+        }
+    }
+}
