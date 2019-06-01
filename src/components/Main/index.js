@@ -3,6 +3,7 @@ import './stylesheet.scss';
 import { classes } from '../../common/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import Planet from '../Planet';
 
 function Main({ className }) {
   const [rotate, setRotate] = useState(0);
@@ -25,51 +26,54 @@ function Main({ className }) {
         <div className="clouds" style={{ transform: `rotate(${rotate / 24}deg)` }}/>
       </div>
       <div className="planets" style={{ marginLeft: `${rotate / 2}px` }}>
-        <div className="row row-alphabet">
-          <div className="planet">
+        <div className="row">
+          <Planet alphabet item="consonants-1">
             Consonants Pt. 1
-          </div>
-          <div className="planet">
+          </Planet>
+          <Planet alphabet item="consonants-2">
             Consonants Pt. 2
-          </div>
+          </Planet>
         </div>
-        <div className="row row-alphabet">
-          <div className="planet">
+        <div className="row">
+          <Planet alphabet item="vowels">
             Vowels
-          </div>
+          </Planet>
         </div>
-        <div className="row row-word">
-          <div className="planet">
-            Numbers
-          </div>
+        <div className="row">
+          <Planet word item="cardinal-numbers">
+            Cardinal Numbers
+          </Planet>
+          <Planet word item="ordinal-numbers">
+            Ordinal Numbers
+          </Planet>
         </div>
-        <div className="row row-word">
-          <div className="planet">
+        <div className="row">
+          <Planet word item="directions">
             Directions
-          </div>
+          </Planet>
         </div>
-        <div className="row row-sentence">
-          <div className="planet">
-            Asking for Direction
-          </div>
+        <div className="row">
+          <Planet sentence item="giving-direction">
+            Giving Direction
+          </Planet>
         </div>
-        <div className="row row-sentence">
-          <div className="planet">
+        <div className="row">
+          <Planet sentence item="ordering-food">
             Ordering Food
-          </div>
+          </Planet>
         </div>
-        <div className="row row-sentence">
-          <div className="planet">
+        <div className="row">
+          <Planet sentence item="common-phrases-1">
             Common Phrases Pt. 1
-          </div>
-          <div className="planet">
+          </Planet>
+          <Planet sentence item="common-phrases-2">
             Common Phrases Pt. 2
-          </div>
+          </Planet>
         </div>
-        <div className="row row-more">
-          <div className="planet">
+        <div className="row">
+          <Planet more>
             Coming Soon
-          </div>
+          </Planet>
         </div>
       </div>
       <div className="logOut">

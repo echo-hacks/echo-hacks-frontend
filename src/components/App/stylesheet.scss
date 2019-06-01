@@ -1,13 +1,19 @@
+@import "../../common/constants";
+
 .App {
   width: 100vw;
   height: 100vh;
+  background-color: $color-space;
+  color: $color-space;
 
   .splash {
     opacity: 0;
     transition: opacity .5s;
+    pointer-events: none;
 
     &.on {
       opacity: 1;
+      pointer-events: auto;
     }
   }
 }

@@ -4,10 +4,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
+  position: absolute;
   width: 100vw;
   height: 100vh;
-  background-color: $color-space;
 
   &:before {
     content: '';
@@ -48,7 +47,7 @@
 
   .planets {
     position: absolute;
-    left: calc(50vw - 10vh);
+    left: calc(50vw - 15vh);
     top: 5vh;
     display: flex;
     align-items: center;
@@ -56,52 +55,11 @@
     .row {
       display: flex;
       flex-direction: column;
-
-      .planet {
-        width: 20vh;
-        height: 20vh;
-        background-size: contain;
-        background-repeat: no-repeat;
-        margin: 5vh 10vh;
-        color: white;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 28px;
-        text-shadow: 0 0 8px white;
-        text-align: center;
-        padding: 12px;
-      }
-
-      &.row-alphabet {
-        .planet {
-          background-image: url(../../assets/Planet1.png);
-        }
-      }
-
-      &.row-word {
-        .planet {
-          background-image: url(../../assets/Planet2.png);
-        }
-      }
-
-      &.row-sentence {
-        .planet {
-          background-image: url(../../assets/Planet3.png);
-        }
-      }
-
-      &.row-more {
-        .planet {
-          background-image: url(../../assets/Planet4.png);
-        }
-      }
     }
   }
 
   .logOut {
-    position: fixed;
+    position: absolute;
     top: 0;
     right: 0;
     color: white;

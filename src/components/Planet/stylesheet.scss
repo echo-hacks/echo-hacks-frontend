@@ -1,0 +1,35 @@
+@import "../../common/constants";
+
+.Planet {
+  width: 20vh;
+  height: 20vh;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 5vh 10vh;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  text-shadow: 0 0 8px white;
+  text-align: center;
+  padding: 12px;
+
+
+  &.alphabet {
+    background-image: url(../../assets/Planet1.png);
+  }
+
+  &.word {
+    background-image: url(../../assets/Planet2.png);
+  }
+
+  &.sentence {
+    background-image: url(../../assets/Planet3.png);
+  }
+
+  &.more {
+    background-image: url(../../assets/Planet4.png);
+  }
+}
