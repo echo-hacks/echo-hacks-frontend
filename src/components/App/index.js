@@ -1,22 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './stylesheet.scss';
+import Splash from '../Splash';
+import { classes } from '../../common/utils';
 
 function App() {
+  const [splash, setSplash] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setSplash(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  console.log(classes('splash', splash && 'on'));
+
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Splash className={classes('splash', splash && 'on')}/>
     </div>
   );
 }

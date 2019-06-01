@@ -1,0 +1,58 @@
+@import "../../common/constants";
+
+.Splash {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color-secondary;
+
+  .logo-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    transition: all;
+
+    .logo-big,
+    .logo-small {
+      position: relative;
+      height: 100px;
+      animation: logo-fade 1s;
+      animation-fill-mode: forwards;
+      left: 181px;
+    }
+
+    .logo-big {
+      opacity: 0;
+    }
+
+    .logo-small {
+      position: absolute;
+      animation: logo-move 1s;
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes logo-fade {
+      30% {
+        left: 181px;
+      }
+      50% {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+        left: 0;
+      }
+    }
+
+    @keyframes logo-move {
+      30% {
+        left: 181px;
+      }
+      to {
+        left: 0;
+      }
+    }
+  }
+}
