@@ -23,3 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 
 /.idea
+
+# Don't care about it for a hackathon project
+/package-lock.json
