@@ -1,4 +1,6 @@
 ## Echo-hacks
+![logo](./logo.png)
+
 Using AI to teach pronunciation.
 
 Helps people who are hard of hearing or learning a second language to better their speech.
