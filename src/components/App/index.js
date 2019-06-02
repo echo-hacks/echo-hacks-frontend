@@ -7,6 +7,45 @@ import { Route } from 'react-router-dom';
 import Learn from '../Learn';
 import Learn1 from '../Learn1';
 
+function eval_edit_distance(arr1, arr2) {
+  var matrix = [];
+
+  var i;
+  for(i = 0; i <= arr2.length; i++){
+    matrix[i] = [i];
+  }
+
+  var j;
+  for(j = 0; j <= arr1.length; j++){
+    matrix[0][j] = j;
+  }
+
+  for(i = 1; i <= arr2.length; i++){
+    for(j = 1; j <= arr1.length; j++){
+      if(arr2[i-1] == arr1[j-1]){
+        matrix[i][j] = matrix[i-1][j-1];
+      } else {
+        matrix[i][j] = Math.min(matrix[i-1][j-1] + 1,
+                                Math.min(matrix[i][j-1] + 1,
+                                         matrix[i-1][j] + 1));
+      }
+    }
+  }
+
+  return matrix[arr2.length][arr1.length];
+}
+var result = eval_edit_distance(
+  [1,2,3,3,3],
+  [1,2,2,3,3]
+)
+console.log(result)
+
+result = eval_edit_distance(
+  [1,2,3,3,3],
+  [1,2,3,3,3]
+)
+console.log(result)
+
 function App() {
   const [splash, setSplash] = useState(true);
 
