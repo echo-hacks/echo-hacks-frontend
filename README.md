@@ -3,6 +3,8 @@ Using AI to teach pronunciation.
 
 Helps people who are hard of hearing or learning a second language to better their speech.
 
+![main_img](./main.gif)
+
 ## Live Demo
 try here : https://echo-hacks.org
 
