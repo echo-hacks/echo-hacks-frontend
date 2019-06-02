@@ -61,9 +61,9 @@ function onDataReceived(pinch, volume) {
       }
      ctx.fillStyle = "rgb(26,15,53)";
       ctx.beginPath();
-      ctx.moveTo(0, 150-pinchList[0]/2);
+      ctx.moveTo(0, 150-pinchList[0]/0.9);
       for (var i=1;i<pinchList.length-1;i++){
-      ctx.lineTo(i*5, 150-pinchList[i]/2);
+      ctx.lineTo(i*5, 150-pinchList[i]/0.9);
       }
       // ctx.moveTo(pinchList.length*10, pinchList[pinchList.length-1]);
     ctx.stroke();
