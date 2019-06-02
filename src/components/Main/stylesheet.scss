@@ -58,12 +58,13 @@
     }
   }
 
-  .logOut {
+  .close {
     position: absolute;
     top: 0;
     right: 0;
     color: white;
     font-size: 40px;
     padding: 8px;
+    cursor: pointer;
   }
 }

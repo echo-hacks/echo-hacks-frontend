@@ -8,9 +8,6 @@ function Section({ className, word, pronunciation, videoRef, children }) {
       <span className="word">{word}</span>
       <span className="pronunciation">{pronunciation || '...'}</span>
       {children}
-      <div>
-        Pitch and volume graph
-      </div>
     </div>
   );
 }

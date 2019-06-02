@@ -18,6 +18,18 @@
     align-items: stretch;
     overflow: hidden;
 
+    .voice {
+      margin-top: 8px;
+      opacity: .8;
+    }
+
+    .videoContainer {
+      display: flex;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 4px rgba(black, .5);
+    }
+
     .divider {
       width: 4px;
       margin: 80px 0;
@@ -44,21 +56,23 @@
   .icon {
     position: absolute;
     color: white;
-    font-size: 40px;
     padding: 8px;
     cursor: pointer;
 
     &.prev {
+      font-size: 56px;
       align-self: center;
       left: 8px;
     }
 
     &.next {
+      font-size: 56px;
       align-self: center;
       right: 8px;
     }
 
     &.mic {
+      font-size: 40px;
       bottom: 32px;
       background-color: white;
       color: red;
@@ -70,6 +84,7 @@
       justify-content: center;
       padding: 0;
       transition: all .5s;
+      box-shadow: 0 0 4px rgba(black, .5);
     }
   }
 
@@ -98,5 +113,15 @@
       color: white;
       transform: scale(1.2);
     }
+  }
+
+  .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: white;
+    font-size: 40px;
+    padding: 8px;
+    cursor: pointer;
   }
 }

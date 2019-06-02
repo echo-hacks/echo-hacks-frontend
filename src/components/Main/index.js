@@ -11,7 +11,7 @@ function Main({ className }) {
   useEffect(() => {
     let _rotate = 0;
     const listener = e => {
-      _rotate += e.deltaX;
+      _rotate += e.deltaX + e.deltaY;
       setRotate(_rotate);
       return false;
     };
@@ -76,7 +76,7 @@ function Main({ className }) {
           </Planet>
         </div>
       </div>
-      <div className="logOut">
+      <div className="close">
         <FontAwesomeIcon fixedWidth icon={faTimes}/>
       </div>
     </div>
