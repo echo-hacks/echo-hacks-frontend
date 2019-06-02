@@ -26,6 +26,11 @@
       opacity: .5;
     }
 
+    .webcam {
+      position: absolute;
+      opacity: 0;
+    }
+
     &.attempting {
       //width: ;
     }
@@ -48,7 +53,7 @@
     }
 
     &.mic {
-      bottom: 16px;
+      bottom: 32px;
       background-color: white;
       color: $color-space;
       width: 80px;
