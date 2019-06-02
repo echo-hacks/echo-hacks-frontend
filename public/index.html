@@ -20,9 +20,13 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>EchoHacks</title>
+    
 </head>
 <body>
-<noscript>You need to enable JavaScript to run this app.</noscript>
+<!-- <noscript>You need to enable JavaScript to run this app.</noscript> -->
+
+<canvas id="voice" width="1000" height="160"></canvas>
+
 <div id="root"></div>
 <!--
   This HTML file is a template.
@@ -39,8 +43,35 @@
 // pinch = 음정 값. 0~512. 소리가 너무 작을경우 -1
 // volume = 소리 크기 값. 0~255 
 // onDataReceived : 125ms마다 실시간으로 인식된 값을 전달함
+var pinchList = []
+var volumeList = []
 function onDataReceived(pinch, volume) {
     console.log(pinch, volume)
+    pinchList.push(pinch)
+    volumeList.push(volume)
+
+    var canvas = document.getElementById('voice');
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
+
+      for (var i=0;i<volumeList.length;i++){
+        ctx.fillRect(i*5,100 - volumeList[i] / 2,5,volumeList[i])
+      }
+     ctx.fillStyle = "rgb(200,0,0)";
+      ctx.beginPath();
+      ctx.moveTo(0, 150-pinchList[0]/2);
+      for (var i=1;i<pinchList.length-1;i++){
+      ctx.lineTo(i*5, 150-pinchList[i]/2);
+      }
+      // ctx.moveTo(pinchList.length*10, pinchList[pinchList.length-1]);
+    ctx.stroke();
+      if(pinchList.length > 100) {
+        pinchList.shift();
+        volumeList.shift();
+      }
+      
 }
 
 // onGraphDataReceived : 3초마다 125ms 단위로 기록된 24개의 데이터를 리턴함
