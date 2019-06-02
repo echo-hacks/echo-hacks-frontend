@@ -26,13 +26,18 @@
       opacity: .5;
     }
 
-    .webcam {
-      position: absolute;
-      opacity: 0;
-    }
+    .sectionAttempt {
+      .preview {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
 
-    &.attempting {
-      //width: ;
+      .recording {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
     }
   }
 
@@ -41,6 +46,7 @@
     color: white;
     font-size: 40px;
     padding: 8px;
+    cursor: pointer;
 
     &.prev {
       align-self: center;
@@ -55,7 +61,7 @@
     &.mic {
       bottom: 32px;
       background-color: white;
-      color: $color-space;
+      color: red;
       width: 80px;
       height: 80px;
       border-radius: 80px;
@@ -63,6 +69,34 @@
       align-items: center;
       justify-content: center;
       padding: 0;
+      transition: all .5s;
+    }
+  }
+
+  &.learn {
+    .sectionContainer {
+      .divider {
+        display: none;
+      }
+
+      .sectionAttempt {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+
+    .mic {
+      color: $color-space;
+    }
+  }
+
+  &.preview {
+    .mic {
+      font-size: 28px;
+      font-weight: bold;
+      color: white;
+      transform: scale(1.2);
     }
   }
 }

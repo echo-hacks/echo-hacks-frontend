@@ -8,10 +8,9 @@ import { faMicrophone } from '@fortawesome/free-solid-svg-icons/faMicrophone';
 import Section from '../Section/Section';
 /* eslint import/no-webpack-loader-syntax: off */
 import ipaDict from '!raw-loader!./ipadict.txt';
-import sampleVideo from '../../assets/speech/can_you_turn_left_here.mp4';
-import SpeechRecognition from 'react-speech-recognition';
-import Webcam from 'react-webcam';
 import * as faceapi from 'face-api.js';
+import { faStop } from '@fortawesome/free-solid-svg-icons/faStop';
+import SpeechRecognition from 'react-speech-recognition';
 
 const dict = {};
 ipaDict.split('\n').forEach(line => {
@@ -24,20 +23,117 @@ faceapi.nets.ssdMobilenetv1.load('/')
   .catch(console.error);
 
 const toIpa = sentence => sentence.split(' ').map(v => dict[v.toLowerCase().replace(/\W/g, '')] || v).join(' ');
+const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1);
 
-const videoRef = createRef();
+const previewRef = createRef();
+const recordingRef = createRef();
 const canvasRef = createRef();
 
-function Learn({ className, transcript, startListening, stopListening, recognition }) {
-  const [attempting, setAttempting] = useState(false);
+let recordingTimeMS = 5000;
+let chunks = null;
+let recorder = null;
+let currentStage = 'learn';
+
+function log(msg) {
+  console.log(msg);
+}
+
+function startRecording(stream, lengthInMS) {
+  recorder = new MediaRecorder(stream);
+  chunks = [];
+
+  recorder.ondataavailable = event => chunks.push(event.data);
+  recorder.start();
+  recorder.onerror = console.error;
+
+  return recorder;
+}
+
+function stop(stream) {
+  stream.getTracks().forEach(track => track.stop());
+}
+
+const data = {
+  'word': {
+    'directions': [{
+      word: 'Go',
+      example: 'go.mp4',
+    }, {
+      word: 'Left',
+      example: 'left.mp4',
+    }, {
+      word: 'Right',
+      example: 'right.mp4',
+    }],
+  },
+  'sentence': {
+    'giving-direction': [{
+      word: 'It is over there',
+      example: 'it_is_over_there.mp4',
+    }, {
+      word: 'You need to go straight',
+      example: 'you_need_to_go_straight.mp4',
+    }, {
+      word: 'Can you turn left here',
+      example: 'can_you_turn_left_here.mp4',
+    }],
+  },
+};
+
+const similarity = (s1, s2) => {
+  let longer = s1;
+  let shorter = s2;
+  if (s1.length < s2.length) {
+    longer = s2;
+    shorter = s1;
+  }
+  const longerLength = longer.length;
+  if (longerLength === 0) {
+    return 1.0;
+  }
+  return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+};
+
+const editDistance = (s1, s2) => {
+  const costs = [];
+  for (let i = 0; i <= s1.length; i++) {
+    let lastValue = i;
+    for (let j = 0; j <= s2.length; j++) {
+      if (i === 0)
+        costs[j] = j;
+      else {
+        if (j > 0) {
+          let newValue = costs[j - 1];
+          if (s1.charAt(i - 1) !== s2.charAt(j - 1))
+            newValue = Math.min(Math.min(newValue, lastValue),
+              costs[j]) + 1;
+          costs[j - 1] = lastValue;
+          lastValue = newValue;
+        }
+      }
+    }
+    if (i > 0)
+      costs[s2.length] = lastValue;
+  }
+  return costs[s2.length];
+};
+
+
+function Learn({ className, match, transcript, startListening, stopListening, recognition }) {
+  const [stage, setStage] = useState('learn'); // learn / record / preview
+  const [step, setStep] = useState(0);
+
+  const { category, item } = match.params;
+  const steps = (data[category] && data[category][item]) || data['sentence']['giving-direction'];
+  const { word, example } = steps[step];
 
   useEffect(() => {
     let count = 0;
     let lastBox = { top: 0, left: 0, width: 1, height: 1 };
+    let timeout = null;
 
     function onPlay() {
-      // console.log('onPlay()');
-      const video = videoRef.current.video;
+      const video = currentStage === 'record' ? previewRef.current : recordingRef.current;
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d');
 
@@ -51,48 +147,91 @@ function Learn({ className, transcript, startListening, stopListening, recogniti
         count = 0;
         faceapi.detectSingleFace(video)
           .then(detection => {
-            lastBox = detection.relativeBox;
+            if (detection) lastBox = detection.relativeBox;
           }).catch(console.error);
       }
-      setTimeout(() => onPlay(), 30);
+      timeout = window.setTimeout(() => onPlay(), 30);
     }
 
     recognition.lang = 'en-US';
-    videoRef.current.video.onloadedmetadata = () => onPlay();
-  });
+    previewRef.current.onloadedmetadata = () => onPlay();
+
+    return () => window.clearTimeout(timeout);
+  }, []);
+
+  const matching = stage === 'preview' && similarity(word, transcript);
 
   return (
-    <div className={classes('Learn', className)}>
-      <div className={classes('sectionContainer', attempting && 'attempting')}>
-        <Section word="You need to go straight."
-                 pronunciation={toIpa('You need to go straight.')}>
+    <div className={classes('Learn', stage, className)}>
+      <div className={classes('sectionContainer')}>
+        <Section className="sectionExample" word={word}
+                 pronunciation={toIpa(word)}>
 
-          <video width="480" height="360" controls>
-            <source src={sampleVideo} type="video/mp4"/>
+          <video width="480" height="360" controls key={example}>
+            <source src={`/speech/${example}`} type="video/mp4"/>
             Your browser does not support the video tag.
           </video>
         </Section>
         <div className="divider"/>
-        <Section word={transcript} pronunciation={toIpa(transcript)}>
-          <Webcam className="webcam" width="480" height="360" ref={videoRef}/>
+        <Section className="sectionAttempt" word={capitalize(transcript)} pronunciation={toIpa(transcript)}>
+          <video className="preview" width="480" height="360" controls ref={previewRef} autoPlay muted/>
+          <video className="recording" width="480" height="360" controls ref={recordingRef} autoPlay/>
           <canvas width="480" height="360" ref={canvasRef}/>
         </Section>
       </div>
-      <div className="icon prev">
+      <div className="icon prev" onClick={() => setStep((step + 1) % steps.length)}>
         <FontAwesomeIcon icon={faChevronLeft} fixedWidth/>
       </div>
-      <div className="icon next">
+      <div className="icon next" onClick={() => setStep((step + steps.length - 1) % steps.length)}>
         <FontAwesomeIcon icon={faChevronRight} fixedWidth/>
       </div>
       <div className="icon mic" onClick={() => {
-        setAttempting(!attempting);
-        if (!attempting) {
+        if (stage === 'learn') {
           startListening();
-        } else {
+
+          const preview = previewRef.current;
+          navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true,
+          }).then(stream => {
+            preview.srcObject = stream;
+            preview.captureStream = preview.captureStream || preview.mozCaptureStream;
+            return new Promise(resolve => preview.onplaying = resolve);
+          }).then(() => startRecording(preview.captureStream(), recordingTimeMS));
+
+          currentStage = 'record';
+          setStage(currentStage);
+        } else if (stage === 'record') {
           stopListening();
+
+          const recording = recordingRef.current;
+          const preview = previewRef.current;
+          if (recorder && recorder.state === 'recording') recorder.stop();
+          stop(preview.srcObject);
+          window.setTimeout(() => {
+            let recordedBlob = new Blob(chunks, { type: 'video/webm' });
+            recording.src = URL.createObjectURL(recordedBlob);
+
+            log('Successfully recorded ' + recordedBlob.size + ' bytes of ' +
+              recordedBlob.type + ' media.');
+          }, 500);
+
+          currentStage = 'preview';
+          setStage(currentStage);
+        } else if (stage === 'preview') {
+          currentStage = 'record';
+          setStage(currentStage);
         }
-      }}>
-        <FontAwesomeIcon icon={faMicrophone} fixedWidth/>
+      }} style={stage === 'preview' ? {
+        backgroundColor: `rgba(${(1 - matching) * 255}, ${matching * 255}, 0)`,
+      } : {}}>
+        {
+          stage === 'record' ?
+            <FontAwesomeIcon icon={faStop} fixedWidth/> :
+            stage === 'learn' ?
+              <FontAwesomeIcon icon={faMicrophone} fixedWidth/> :
+              <span>{matching * 100 | 0}%</span>
+        }
       </div>
     </div>
   );
